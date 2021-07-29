@@ -1,0 +1,16 @@
+defaults:
+  - dataset: imagenet1k
+  - model: resnet152x4
+  - optimizer: sgd
+  - scheduler: warmup_piecewise
+  - loss: bce
+  - hyperparameter: bit
+
+base:
+  mode: train_eval
+  target: bit-s
+  env: 
+    mode: gpus
+    mixed_precision: True
+  seed: '0xC0FFEE'
+  save_dir: /workspace/chpt/bit-s

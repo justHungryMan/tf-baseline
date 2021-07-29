@@ -1,0 +1,4 @@
+bit-s:
+  learning_rate: 0.03
+  batch_size: 512
+  epoch: 90
