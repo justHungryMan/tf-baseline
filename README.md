@@ -1,3 +1,4 @@
 # TF-Baseline
 
-[] BiT-S
+- [ ] BiT-S
+- [ ] ViT
