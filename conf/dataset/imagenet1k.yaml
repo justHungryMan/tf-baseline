@@ -20,13 +20,16 @@ train:
         size: [224, 224]
         method: bicubic
     - type: random_flip
+    - type: scaling
+      params:
+        size: 255
     - type: cast
       params:
         type: float16
     - type: normalize
       params:
-        mean: 127.5
-        std: 127.5
+        mean: 0.5
+        std: 0.5
 
 test:
   type: tensorflow_dataset
@@ -44,10 +47,13 @@ test:
       params:
         size: [224, 224]
         method: bicubic
+    - type: scaling
+      params:
+        size: 255
     - type: cast
       params:
         type: float16
     - type: normalize
       params:
-        mean: 127.5
-        std: 127.5
+        mean: 0.5
+        std: 0.5
