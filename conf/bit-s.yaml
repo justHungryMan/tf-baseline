@@ -14,3 +14,4 @@ base:
     mixed_precision: True
   seed: '0xC0FFEE'
   save_dir: /workspace/chpt/bit-s
+  resume: False
