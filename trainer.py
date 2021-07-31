@@ -80,7 +80,7 @@ class Trainer():
         if tf.io.gfile.isdir(self.conf.base.save_dir):
             if self.conf.base.resume is True:
                 latest = tf.train.latest_checkpoint(self.conf.base.save_dir)
-                model.load_wieghts(latest).expect_partial()
+                model.load_weights(latest).expect_partial()
                 self.initial_epoch = int(os.path.basename(latest).split('_')[-1])
                 logging.info(f'Training resumed from {self.initial_epoch} epochs')
             else:
@@ -101,11 +101,11 @@ class Trainer():
         }
     
     def build_callback(self):
-        # Todo 
+        # TODO 
         callbacks = []
+        callbacks.append(baseline.util.callback.MonitorCallback())
         callbacks.append(tf.keras.callbacks.TerminateOnNaN())
         callbacks.append(tf.keras.callbacks.ProgbarLogger(count_mode='steps'))
-        callbacks.append(baseline.util.callback.MonitorCallback())
         callbacks.append(tf.keras.callbacks.ModelCheckpoint(filepath=os.path.join(self.conf.base.save_dir, 'chpt_{epoch}'),
                                             save_weights_only=True))
         log_dir = f"{os.path.join(self.conf.base.save_dir, 'logs/fit/')}" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
