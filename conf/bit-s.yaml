@@ -1,6 +1,6 @@
 defaults:
   - dataset: imagenet1k
-  - model: resnet152x4
+  - model: resnet50x1
   - optimizer: sgd
   - scheduler: warmup_piecewise
   - loss: bce
@@ -10,8 +10,12 @@ base:
   mode: train_eval
   target: bit-s
   env: 
-    mode: gpus
+    mode: tpu
+    tpu_project: TPU0
+    tpu_name: bit-s
+    tpu_type: v3-8
     mixed_precision: True
+
   seed: '0xC0FFEE'
   save_dir: /workspace/chpt/bit-s
   resume: False

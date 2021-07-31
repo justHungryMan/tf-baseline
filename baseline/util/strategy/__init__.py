@@ -1,15 +1,16 @@
 import logging
 import tensorflow as tf
 
+from baseline.utils.tpu.instance import TPUManager
+
 LOGGER = logging.getLogger(__name__)
 
 def create(conf):
     # https://github.com/google/automl/blob/2dbfb7984c20c24d856b96b54498799ed1b270cb/efficientdet/keras/eval.py#L56
 
     if conf.mode == 'tpu':
-        tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(
-            conf.tpu_name, conf.tpu_zone, conf.gcp_project
-        )
+        TPUManager(conf.tpu_project).create_graceful(conf.tpu_name, conf.tpu_type)
+        tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=conf.tpu_name,)
         tf.config.experimental_connect_to_cluster(tpu_cluster_resolver)
         tf.tpu.experimental.initialize_tpu_system(tpu_cluster_resolver)
         ds_strategy = tf.distribute.TPUStrategy(tpu_cluster_resolver)
