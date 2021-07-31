@@ -325,7 +325,7 @@ class ResnetV2(tf.keras.Model):
       self._head = tf.keras.layers.Dense(
           units=num_outputs,
           use_bias=True,
-          # kernel_initializer="zeros",
+          kernel_initializer="zeros",
           kernel_regularizer=tf.keras.regularizers.l2(weight_decay / 2),
           bias_regularizer=tf.keras.regularizers.l2(weight_decay / 2),
           trainable=self.trainable,
