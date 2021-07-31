@@ -1,7 +1,7 @@
 import logging
 import tensorflow as tf
 
-from baseline.utils.tpu.instance import TPUManager
+from tpu.instance import TPUManager
 
 LOGGER = logging.getLogger(__name__)
 
