@@ -8,7 +8,7 @@ def create(conf):
 
     if conf.mode == 'tpu':
         tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(
-            conf.tpu_name, conf.tpu_zone, conf.gcp_project
+            conf.tpu_name
         )
         tf.config.experimental_connect_to_cluster(tpu_cluster_resolver)
         tf.tpu.experimental.initialize_tpu_system(tpu_cluster_resolver)

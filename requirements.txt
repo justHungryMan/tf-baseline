@@ -1,2 +1,2 @@
-hydra
+hydra-core
 omegaconf
