@@ -6,9 +6,9 @@ import tensorflow as tf
 LOGGER = logging.getLogger(__name__)
 
 class TPUManager:
-    def __init__(self, project='TPU0'):
+    def __init__(self, project='tpu0'):
         self.base_url = 'https://tpu.googleapis.com'
-        self.project = 'TPU0'
+        self.project = project
         self.zone = 'europe-west4-a'
 
     @property
