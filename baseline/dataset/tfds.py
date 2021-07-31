@@ -84,8 +84,6 @@ def preprocess(config, preprocess_list, info, decoder, mode):
             return center_crop(image, **conf['params']), label
         elif conf['type'] in {'inception_distort_color'}:
             return distort_color(image, **conf.get('params', {})), label
-        elif conf['type'] in {'scaling'}:
-            return image / conf['params']['size'], label
         elif conf['type'] in {'cast'}:
             dtype = tf.bfloat16 if conf['params']['type'] == 'bfloat16' else None
             dtype = tf.float32 if conf['params']['type'] == 'float32' else dtype
