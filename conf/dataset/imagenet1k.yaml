@@ -9,7 +9,7 @@ train:
 
   repeat: True
   shuffle: True
-  batch_size: 512
+  batch_size: 4096
   image_shape: [224, 224, 3]
   preprocess:
     - type: inception_random_crop
@@ -20,12 +20,9 @@ train:
         size: [224, 224]
         method: bicubic
     - type: random_flip
-    - type: scaling
-      params:
-        size: 255
     - type: cast
       params:
-        type: float16
+        type: bfloat16
     - type: normalize
       params:
         mean: 0.5
@@ -37,7 +34,7 @@ test:
   split: "validation"
   drop_remainder: False
 
-  batch_size: 512
+  batch_size: 4096
   image_shape: [224, 224, 3]
   preprocess:
     - type: inception_center_crop
@@ -47,12 +44,9 @@ test:
       params:
         size: [224, 224]
         method: bicubic
-    - type: scaling
-      params:
-        size: 255
     - type: cast
       params:
-        type: float16
+        type: bfloat16
     - type: normalize
       params:
         mean: 0.5
