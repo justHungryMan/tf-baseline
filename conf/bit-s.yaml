@@ -11,9 +11,9 @@ base:
   target: bit-s
   env: 
     mode: tpu
-    tpu_project: tpu0
+    gcp_project: tpu0
     tpu_name: bit-s
-    tpu_type: v3-8
+    tpu_zone: europe-west4-a
     mixed_precision: True
 
   seed: '0xC0FFEE'
