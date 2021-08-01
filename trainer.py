@@ -102,15 +102,13 @@ class Trainer():
     
     def build_callback(self):
         # TODO 
-        callbacks = []
-        callbacks.append(baseline.util.callback.MonitorCallback())
-        callbacks.append(tf.keras.callbacks.TerminateOnNaN())
-        callbacks.append(tf.keras.callbacks.ProgbarLogger(count_mode='steps'))
-        callbacks.append(tf.keras.callbacks.ModelCheckpoint(filepath=os.path.join(self.conf.base.save_dir, 'chpt_{epoch}'),
-                                            save_weights_only=True))
-        log_dir = f"{os.path.join(self.conf.base.save_dir, 'logs/fit/')}" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
-        callbacks.append(tensorboard_callback)
+        for single_conf in self.conf.callbacks.modules:
+            if single_conf['type'] == 'ModelCheckpoint':
+                single_conf['params']['filepath'] = os.path.join(self.conf.base.save_dir, 'chpt_{epoch}')
+            elif single_conf['type'] == 'TensorBoard':
+                single_conf['params']['log_dir'] = f"{os.path.join(self.conf.base.save_dir, 'logs/fit/')}" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+        callbacks = baseline.util.callback.create(self.conf.callbacks.modules)
         return callbacks
 
     def run(self):
