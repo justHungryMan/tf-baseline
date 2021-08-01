@@ -1,4 +1,4 @@
-data_dir: /workspace/tensorflow_datasets
+data_dir: gs://jun_tpu0/tfds
 type: tensorflow_dataset
 train:
   name: imagenet2012:5.1.0
