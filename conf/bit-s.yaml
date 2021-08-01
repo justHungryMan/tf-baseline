@@ -5,6 +5,7 @@ defaults:
   - scheduler: warmup_piecewise
   - loss: bce
   - hyperparameter: bit
+  - callbacks: base
 
 base:
   mode: train_eval
