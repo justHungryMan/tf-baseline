@@ -1,0 +1,33 @@
+train:
+  preprocess:
+      - type: inception_random_crop
+        params:
+          size: 224
+      - type: resize
+        params:
+          size: [224, 224]
+          method: bicubic
+      - type: random_flip
+      - type: cast
+        params:
+          type: bfloat16
+      - type: normalize
+        params:
+          mean: 0.5
+          std: 0.5
+test:
+  preprocess:
+    - type: inception_center_crop
+      params:
+        size: 224
+    - type: resize
+      params:
+        size: [224, 224]
+        method: bicubic
+    - type: cast
+      params:
+        type: bfloat16
+    - type: normalize
+      params:
+        mean: 0.5
+        std: 0.5

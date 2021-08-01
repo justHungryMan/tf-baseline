@@ -6,6 +6,8 @@ defaults:
   - loss: bce
   - hyperparameter: bit
   - callbacks: base
+  - processing: bit-r50x1
+
 
 base:
   mode: train_eval
