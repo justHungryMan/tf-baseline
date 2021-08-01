@@ -5,12 +5,14 @@ defaults:
   - scheduler: warmup_piecewise
   - loss: bce
   - hyperparameter: bit
+  - callbacks: base
+  - processing: bit-r50x1
 
 base:
   mode: train_eval
   target: bit-s
   env: 
-    mode: tpu
+    mode: gpu
     gcp_project: tpu0
     tpu_name: bit-s
     tpu_zone: europe-west4-a

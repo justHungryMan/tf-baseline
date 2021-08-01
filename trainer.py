@@ -89,7 +89,7 @@ class Trainer():
             tf.io.gfile.makedirs(self.conf.base.save_dir)
     
     def build_dataset(self):
-        dataset = baseline.dataset.create(config=self.conf['dataset'], seed=self.conf.base.seed, num_devices=self.strategy.num_replicas_in_sync)
+        dataset = baseline.dataset.create(config=self.conf['dataset'], processing_config=self.conf['processing'], seed=self.conf.base.seed, num_devices=self.strategy.num_replicas_in_sync)
         train_dataset = self.strategy.experimental_distribute_dataset(dataset['train']['dataset'])
         test_dataset = self.strategy.experimental_distribute_dataset(dataset['test']['dataset'])
 

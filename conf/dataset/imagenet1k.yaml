@@ -1,53 +1,24 @@
-data_dir: gs://jun_tpu0/tfds
-mode: label
+data_dir: /workspace/tensorflow_datasets
+type: tensorflow_dataset
 train:
-  type: tensorflow_dataset
   name: imagenet2012:5.1.0
   split: "train"  # 49k
-  examples_per_class: -1
   drop_remainder: True
 
   repeat: True
   shuffle: True
   batch_size: 4096
-  image_shape: [224, 224, 3]
-  preprocess:
-    - type: inception_random_crop
-      params:
-        size: 224
-    - type: resize
-      params:
-        size: [224, 224]
-        method: bicubic
-    - type: random_flip
-    - type: cast
-      params:
-        type: bfloat16
-    - type: normalize
-      params:
-        mean: 0.5
-        std: 0.5
-
+  
+  preprocess: ???
+  postprocess: ???
+  
 test:
-  type: tensorflow_dataset
   name: imagenet2012:5.1.0
   split: "validation"
   drop_remainder: False
 
   batch_size: 4096
-  image_shape: [224, 224, 3]
-  preprocess:
-    - type: inception_center_crop
-      params:
-        size: 224
-    - type: resize
-      params:
-        size: [224, 224]
-        method: bicubic
-    - type: cast
-      params:
-        type: bfloat16
-    - type: normalize
-      params:
-        mean: 0.5
-        std: 0.5
+
+  preprocess: ???
+  postprocess: ???
+  
