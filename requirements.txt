@@ -1,2 +1,6 @@
+tensorflow-gpu==2.5.0
+tensorflow-probability
+tensorflow-datasets
 hydra-core
 omegaconf
+cloud-tpu-client

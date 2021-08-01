@@ -4,9 +4,13 @@ import tensorflow_probability as tfp
 import tensorflow_datasets as tfds
 import os
 import json
+import logging
+
 
 from .inception import center_crop, distort_crop, distort_color
 
+
+LOGGER = logging.getLogger(__name__)
 
 # Adjust depending on the available RAM.
 MAX_IN_MEMORY = 200_000
@@ -14,7 +18,7 @@ MAX_IN_MEMORY = 200_000
 
 def create(config, data_dir=None, seed=None, num_devices=1):
     mode = 'label'
-    
+    logging.info(f'Data Directory: {os.path.join(data_dir, config["name"])}')
     builder = tfds.builder(config['name']) if data_dir is None else tfds.builder(config['name'], data_dir=data_dir)
     builder.download_and_prepare(
         # download_config=tfds.download.DownloadConfig(manula_dir='~/tensorflow_datasets/')

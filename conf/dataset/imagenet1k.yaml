@@ -1,4 +1,4 @@
-data_dir: gs://jun_tpu0/datasets/
+data_dir: gs://jun_tpu0/tfds
 mode: label
 train:
   type: tensorflow_dataset
