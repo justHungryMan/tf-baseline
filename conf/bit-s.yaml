@@ -8,11 +8,12 @@ defaults:
   - callbacks: base
   - processing: bit-r50x1
 
+
 base:
   mode: train_eval
   target: bit-s
   env: 
-    mode: gpu
+    mode: tpu
     gcp_project: tpu0
     tpu_name: bit-s
     tpu_zone: europe-west4-a
