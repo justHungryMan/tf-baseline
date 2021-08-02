@@ -7,7 +7,7 @@ train:
 
   repeat: True
   shuffle: True
-  batch_size: 4096
+  batch_size: ???
   
   preprocess: ???
   postprocess: ???
@@ -17,7 +17,7 @@ test:
   split: "validation"
   drop_remainder: False
 
-  batch_size: 4096
+  batch_size: ???
 
   preprocess: ???
   postprocess: ???

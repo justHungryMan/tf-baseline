@@ -20,5 +20,6 @@ base:
     mixed_precision: True
 
   seed: '0xC0FFEE'
-  save_dir: gs://jun_tpu0/bit-s
+  pretrain: ???
+  save_dir: gs://jun_tpu0/bit-s/upstream
   resume: False

@@ -1,7 +1,6 @@
 from . import tfds
 import tensorflow as tf
 
-# @tf.autograph.experimental.do_not_convert
 def create(config, processing_config, seed=None, num_devices=None):
     if config['type'] == 'tensorflow_dataset':
         train_config = config['train']

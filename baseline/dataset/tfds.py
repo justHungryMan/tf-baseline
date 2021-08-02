@@ -47,7 +47,7 @@ def create(config, data_dir=None, seed=None, num_devices=1):
 
     # mixing
     # Not implemented yet
-    #dataset = postprocess(config.get('postprocess', []), dataset)
+    dataset = postprocess(config.get('postprocess', []), dataset)
 
     # shape
     dataset = dataset.map(lambda v: (v['image'], v['label']), tf.data.experimental.AUTOTUNE)

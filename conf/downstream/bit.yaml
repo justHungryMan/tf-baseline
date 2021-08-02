@@ -1,8 +1,9 @@
 hyperparameter:
-  bit-s:
-    learning_rate: 0.03
-    batch_size: 4096
-    epoch: 90
+  imagenet:
+    learning_rate: 0.003
+    batch_size: 512
+    epoch: ???
+    steps: 20000
 
 dataset:
   data_dir: gs://jun_tpu0/tfds
@@ -14,7 +15,7 @@ dataset:
 
     repeat: True
     shuffle: True
-    batch_size: 4096
+    batch_size: ???
     
     preprocess: ???
     postprocess: ???
@@ -24,16 +25,19 @@ dataset:
     split: "validation"
     drop_remainder: False
 
-    batch_size: 4096
+    batch_size: ???
 
     preprocess: ???
     postprocess: ???
+
 loss:
   type: ce
+
 optimizer:
   type: sgd
   params:
     momentum: 0.9
+
 scheduler:
   type: warmup_piecewise
   steps: ???
@@ -42,16 +46,17 @@ scheduler:
     warmup_step: 500
     boundaries: ???
     values: ???  
+
 processing:
   train:
     preprocess:
-        - type: inception_random_crop
-          params:
-            size: 224
         - type: resize
           params:
-            size: [224, 224]
+            size: [448, 448]
             method: bicubic
+        - type: inception_random_crop
+          params:
+            size: 384
         - type: random_flip
         - type: cast
           params:
@@ -60,14 +65,15 @@ processing:
           params:
             mean: 0.5
             std: 0.5
+    postproces:
+      - type: mixup
+        params:
+          alpha: 0.1
   test:
     preprocess:
-      - type: inception_center_crop
-        params:
-          size: 224
       - type: resize
         params:
-          size: [224, 224]
+          size: [384, 384]
           method: bicubic
       - type: cast
         params:
