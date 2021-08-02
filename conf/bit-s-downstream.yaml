@@ -1,0 +1,17 @@
+defaults:
+  - downstream: bit-s
+
+
+base:
+  mode: finetuning
+  target: bit-s
+  env: 
+    mode: tpu
+    gcp_project: tpu0
+    tpu_name: bit-s
+    tpu_zone: europe-west4-a
+    mixed_precision: True
+
+  seed: '0xC0FFEE'
+  save_dir: gs://jun_tpu0/bit-s
+  resume: False

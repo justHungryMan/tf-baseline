@@ -1,0 +1,78 @@
+hyperparameter:
+  bit-s:
+    learning_rate: 0.03
+    batch_size: 4096
+    epoch: 90
+
+dataset:
+  data_dir: gs://jun_tpu0/tfds
+  type: tensorflow_dataset
+  train:
+    name: imagenet2012:5.1.0
+    split: "train"  # 49k
+    drop_remainder: True
+
+    repeat: True
+    shuffle: True
+    batch_size: 4096
+    
+    preprocess: ???
+    postprocess: ???
+    
+  test:
+    name: imagenet2012:5.1.0
+    split: "validation"
+    drop_remainder: False
+
+    batch_size: 4096
+
+    preprocess: ???
+    postprocess: ???
+loss:
+  type: ce
+optimizer:
+  type: sgd
+  params:
+    momentum: 0.9
+scheduler:
+  type: warmup_piecewise
+  steps: ???
+  params:
+    init_lr: 0.0
+    warmup_step: 500
+    boundaries: ???
+    values: ???  
+processing:
+  train:
+    preprocess:
+        - type: inception_random_crop
+          params:
+            size: 224
+        - type: resize
+          params:
+            size: [224, 224]
+            method: bicubic
+        - type: random_flip
+        - type: cast
+          params:
+            type: bfloat16
+        - type: normalize
+          params:
+            mean: 0.5
+            std: 0.5
+  test:
+    preprocess:
+      - type: inception_center_crop
+        params:
+          size: 224
+      - type: resize
+        params:
+          size: [224, 224]
+          method: bicubic
+      - type: cast
+        params:
+          type: bfloat16
+      - type: normalize
+        params:
+          mean: 0.5
+          std: 0.5
