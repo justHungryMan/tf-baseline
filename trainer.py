@@ -25,14 +25,14 @@ class Trainer():
         self.set_batch_size()
 
     def set_batch_size(self):
-        self.batch_size = conf.hyperparameter[conf.base.target].batch_size
+        self.batch_size = self.conf.hyperparameter[self.conf.base.target].batch_size
         self.conf.dataset.train.batch_size = self.conf.dataset.test.batch_size = self.batch_size
         
     def set_hyperparameter(self, conf, num_examples):
         lr = conf.hyperparameter[conf.base.target].learning_rate
         self.steps_per_epoch = (num_examples // self.batch_size)
 
-        if conf.hyperparameter[conf.base.target].get('epoch', None):
+        if conf.hyperparameter[conf.base.target].get('epoch', None) is None:
             self.epoch = math.ceil(conf.hyperparameter[conf.base.target].steps / self.steps_per_epoch)
         else:
             self.epoch = conf.hyperparameter[conf.base.target].epoch
@@ -54,7 +54,7 @@ class Trainer():
             conf.scheduler.params.boundaries = boundaries
             conf.scheduler.params.values = values
         # Downstream
-        elif conf.base.target == 'imagenet'
+        elif conf.base.target == 'imagenet':
             boundaries = []
             values = []
             multistep_steps = [0.3, 0.6, 0.9]
@@ -89,7 +89,6 @@ class Trainer():
             model.build((None, None, None, 3))
             if self.conf.base.get('pretrain'):
                 self.load_weights(model)
-                tf.keras.backend.set_value(model.optimizer.iterations, 0)
             self.load_chpt(model)
 
             optimizer = self.build_optimizer()
@@ -98,13 +97,25 @@ class Trainer():
             model.compile(optimizer=optimizer, loss=loss_fn, metrics=['accuracy'],
                                 #steps_per_execution=1
                                 )
+            if self.conf.base.get('pretrain'):
+                tf.keras.backend.set_value(model.optimizer.iterations, 0)
             logging.info(f'Build Model Finish')
         model.summary()
         return model
 
     def load_weights(self, model):
-        latest = tf.train.latest_checkpoint(self.conf.base.pretrain)
-        model.load_weights(latest).expect_partial()
+        if '.h' in self.conf.base.pretrain:
+            model.load_weights(self.conf.base.pretrain)
+        else:
+            latest = tf.train.latest_checkpoint(self.conf.base.pretrain)
+            model.load_weights(latest).expect_partial()
+        model._head = tf.keras.layers.Dense(
+                units=1000, 
+                use_bias=True, 
+                kernel_initializer="zeros", 
+                trainable=True,
+                name="head/dense"
+            )
         logging.info(f'Model loaded from {self.conf.base.pretrain}')
 
     def load_chpt(self, model):
@@ -167,6 +178,7 @@ class Trainer():
     
     def train_eval(self, train_dataset, model, callbacks, val_kwargs={}):
         logging.info(f'Start fit model')
+        logging.info(f'Configuration\n{OmegaConf.to_yaml(self.conf)}')
         tic = time.time()
         history = model.fit(
             train_dataset,
@@ -178,6 +190,8 @@ class Trainer():
             **val_kwargs
         )
         toc = time.time()
+
+        logging.info(f'Time: {toc - tic}')
 
 
     def eval(self):
@@ -195,7 +209,7 @@ def set_seed(conf):
 
 
 
-@hydra.main(config_path='conf', config_name='bit-s')
+@hydra.main(config_path='conf', config_name='bit-s-downstream')
 def main(conf : DictConfig) -> None:
     logging.info(f'Configuration\n{OmegaConf.to_yaml(conf)}')
     # Set Seed

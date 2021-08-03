@@ -74,7 +74,7 @@ def postprocess(config, dataset):
             def _mixup(data):
                 beta_dist = tfp.distributions.Beta(alpha, alpha)
                 beta = tf.cast(beta_dist.sample([]), tf.float32)
-                data['image'] = (beta * data['image'] + (1 - beta) * tf.reverse(data['image'], axis=[0]))
+                data['image'] = (tf.cast(beta, data['image'].dtype) * data['image'] + (1 - tf.cast(beta, data['image'].dtype)) * tf.reverse(data['image'], axis=[0]))
                 data['label'] = (beta * data['label'] + (1 - beta) * tf.reverse(data['label'], axis=[0]))
                 return data
             return _mixup

@@ -1,16 +1,20 @@
 import tensorflow as tf
-
+import copy
 from .inception import center_crop, distort_crop, distort_color
 
 def create(preprocess_list, info, decoder):
     def preprocess_image(conf, image, label):
         if conf['type'] == 'resize':
-            return tf.image.resize(image, **{
-                'size': [224, 224],
-                'method': 'bicubic'
-            }), label
+            config = {
+                'method': conf['params']['method']
+            }
+            config['size'] = (conf['params']['size'][0], conf['params']['size'][1])
+            return tf.image.resize(image, **config), label
         elif conf['type'] == 'random_crop':
-            return tf.image.random_crop(image, **conf['params']), label
+            config = {
+                'size': (conf['params']['size'][0], conf['params']['size'][1], conf['params']['size'][2])
+            }
+            return tf.image.random_crop(image, **config), label
         elif conf['type'] == 'random_flip':
             return tf.image.random_flip_left_right(image), label
         elif conf['type'] == 'normalize':
