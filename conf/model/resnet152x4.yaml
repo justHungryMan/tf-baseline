@@ -1,1 +1,2 @@
 type: bit/R152x4
+weight_decay: 0.0001

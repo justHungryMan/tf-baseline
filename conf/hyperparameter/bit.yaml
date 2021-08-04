@@ -1,4 +1,7 @@
 bit-s:
   learning_rate: 0.03
   batch_size: 4096
+  # imagenet train num_examples: 1281167
+  # (1281167 // 4096)  * 90 epochs
+  steps: 28_080
   epoch: 90

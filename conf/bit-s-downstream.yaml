@@ -1,0 +1,118 @@
+base:
+  mode: train_eval
+  target: imagenet
+  env: 
+    mode: tpu
+    gcp_project: tpu0
+    tpu_name: bit-downstream
+    tpu_zone: europe-west4-a
+    mixed_precision: True
+
+  seed: '0xC0FFEE'
+  pretrain: gs://jun_tpu0/bit-s/upstream/r101x1
+  save_dir: gs://jun_tpu0/bit-s/downstream/r101x1
+  resume: False
+
+hyperparameter:
+  imagenet:
+    learning_rate: 0.003
+    batch_size: 512
+    epoch: ???
+    steps: 20000
+
+model:
+  type: bit/R101x1
+  weight_decay: 0
+
+dataset:
+  data_dir: gs://jun_tpu0/tfds
+  type: tensorflow_dataset
+  train:
+    name: imagenet2012:5.1.0
+    split: "train"  # 49k
+    drop_remainder: True
+
+    repeat: True
+    shuffle: True
+    batch_size: ???
+    
+    preprocess: ???
+    postprocess: ???
+    
+  test:
+    name: imagenet2012:5.1.0
+    split: "validation"
+    drop_remainder: False
+
+    batch_size: ???
+
+    preprocess: ???
+    postprocess: ???
+
+loss:
+  type: ce
+
+optimizer:
+  type: sgd
+  params:
+    momentum: 0.9
+
+scheduler:
+  type: warmup_piecewise
+  steps: ???
+  params:
+    init_lr: 0.0
+    warmup_step: 500
+    boundaries: ???
+    values: ???  
+
+processing:
+  train:
+    preprocess:
+        - type: resize
+          params:
+            size: [448, 448]
+            method: bicubic
+        - type: random_crop
+          params:
+            size: [384, 384, 3]
+        - type: random_flip
+        - type: cast
+          params:
+            type: bfloat16
+        - type: normalize
+          params:
+            mean: 0.5
+            std: 0.5
+    postprocess:
+      - type: mixup
+        params:
+          alpha: 0.1
+  test:
+    preprocess:
+      - type: resize
+        params:
+          size: [384, 384]
+          method: bicubic
+      - type: cast
+        params:
+          type: bfloat16
+      - type: normalize
+        params:
+          mean: 0.5
+          std: 0.5
+callbacks:
+  modules:
+  - type: MonitorCallback
+  - type: TerminateOnNaN
+  - type: ProgbarLogger
+    params:
+      count_mode: steps
+  - type: ModelCheckpoint
+    params:
+      filepath: ???
+      save_weights_only: True
+  - type: TensorBoard
+    params:
+      log_dir: ???
+      histogram_freq: 1

@@ -1,6 +1,6 @@
 defaults:
   - dataset: imagenet1k
-  - model: resnet50x1
+  - model: resnet101x1
   - optimizer: sgd
   - scheduler: warmup_piecewise
   - loss: bce
@@ -15,10 +15,11 @@ base:
   env: 
     mode: tpu
     gcp_project: tpu0
-    tpu_name: bit-s
+    tpu_name: bit-downstream
     tpu_zone: europe-west4-a
     mixed_precision: True
 
   seed: '0xC0FFEE'
-  save_dir: gs://jun_tpu0/bit-s
+  pretrain: ???
+  save_dir: gs://jun_tpu0/bit-s/upstream/r101x1
   resume: False
